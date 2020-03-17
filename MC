@@ -1,0 +1,64 @@
+Using Terariausing System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.Graphics.Effects;
+using Terraria.Graphics.Shaders;
+using Terraria.ID;
+using Terraria.Localization;
+using Terraria.ModLoader;
+using Terraria.UI;
+
+namespace MinecraftTerraria
+{
+    public class MinecraftMusicMod : Mod
+    {
+        public MinecraftMusicMod()
+        {
+
+
+        }
+        public override void UpdateMusic(ref int music)
+        {
+            if (Main.myPlayer != -1 && !Main.gameMenu)
+            {
+                int[] noOverride =
+                {
+
+                };
+
+                int m = music;
+                bool playMusic =
+                    !noOverride.Any(song => song == m)
+                    || !Main.npc.Any(npc => npc.boss);
+
+                Player player = Main.LocalPlayer;
+
+                if (player.active && player.ZoneOverworldHeight && !Main.dayTime && playMusic && !player.ZoneRain)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/DryHandsNight");
+                }
+                if (player.active && player.ZoneOverworldHeight && Main.dayTime && playMusic && !player.ZoneRain)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/WetHandsDay");
+                }
+                if (player.active && playMusic && player.ZoneRain)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/Rain");
+                }
+                if (player.active && player.ZoneRockLayerHeight && playMusic)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/SubwooferCave");
+                }
+                if (player.active && player.ZoneDirtLayerHeight && playMusic)
+                {
+                    music = GetSoundSlot(SoundType.Music, "Sounds/Music/SwedenInDirt");
+                }
+
+            }
+        }
+    }
+}
